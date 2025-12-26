@@ -1,4 +1,5 @@
 export type Category = 'education' | 'finance' | 'health' | 'social' | 'other';
+export type GoalType = 'numeric' | 'streak';
 
 export interface HistoryEntry {
   id: string;
@@ -11,6 +12,7 @@ export interface Goal {
   id: string;
   title: string;
   category: Category;
+  type: GoalType;
   currentValue: number;
   targetValue: number;
   unit: string; 

@@ -7,22 +7,24 @@ interface DraggableGoalItemProps {
   goal: Goal;
   onDelete: (id: string) => void;
   onOpenDetail: (goal: Goal) => void;
+  onQuickCheckIn: (goalId: string) => void;
 }
 
-export const DraggableGoalItem: React.FC<DraggableGoalItemProps> = ({ goal, onDelete, onOpenDetail }) => {
+export const DraggableGoalItem: React.FC<DraggableGoalItemProps> = ({ goal, onDelete, onOpenDetail, onQuickCheckIn }) => {
   const controls = useDragControls();
   
   return (
     <Reorder.Item
       value={goal}
-      dragListener={false} // Tüm kartın sürüklenmesini engelle
-      dragControls={controls} // Sadece tutamaç ile sürükle
+      dragListener={false} 
+      dragControls={controls} 
       className="relative touch-none"
     >
       <GoalCard 
         goal={goal} 
         onDelete={onDelete} 
         onOpenDetail={onOpenDetail} 
+        onQuickCheckIn={onQuickCheckIn}
         dragControls={controls}
       />
     </Reorder.Item>

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Goal } from '../types';
-import { ArrowLeft, Calendar, Plus, Trash2, TrendingUp, History, Save, AlertCircle, Sparkles, Loader2 } from 'lucide-react';
-import { getGoalAdvice } from '../services/geminiService';
+import { ArrowLeft, Calendar, Plus, Trash2, TrendingUp, History, Save, AlertCircle } from 'lucide-react';
 
 interface GoalDetailScreenProps {
   goal: Goal;
@@ -22,34 +21,12 @@ export const GoalDetailModal: React.FC<GoalDetailScreenProps> = ({
   const [newDate, setNewDate] = useState(new Date().toISOString().split('T')[0]);
   const [newNote, setNewNote] = useState('');
   
-  // AI State
-  const [advice, setAdvice] = useState<string | null>(null);
-  const [loadingAdvice, setLoadingAdvice] = useState(false);
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newValue) return;
     onAddHistory(goal.id, parseFloat(newValue), newDate, newNote);
     setNewValue('');
     setNewNote('');
-  };
-
-  const handleGetAdvice = async () => {
-    setLoadingAdvice(true);
-    setAdvice(null);
-    try {
-        const result = await getGoalAdvice({
-            goalTitle: goal.title,
-            current: goal.currentValue,
-            target: goal.targetValue,
-            unit: goal.unit
-        });
-        setAdvice(result);
-    } catch (error) {
-        setAdvice("Bağlantı hatası oluştu.");
-    } finally {
-        setLoadingAdvice(false);
-    }
   };
 
   const sortedHistory = [...goal.history].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
@@ -100,55 +77,6 @@ export const GoalDetailModal: React.FC<GoalDetailScreenProps> = ({
              <p className="text-center text-xs text-zinc-500 mt-3 font-mono">
                 Hedef: <span className="text-white">{goal.targetValue.toLocaleString()} {goal.unit}</span>
              </p>
-          </div>
-
-          {/* AI Coach Section */}
-          <div className="mb-8 relative overflow-hidden">
-             <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 rounded-2xl blur-xl"></div>
-             <div className="bg-zinc-900/50 backdrop-blur-md rounded-2xl p-5 border border-indigo-500/30 relative z-10">
-                <div className="flex items-center gap-2 mb-3 text-indigo-300 font-bold text-sm uppercase tracking-wide">
-                    <Sparkles size={16} />
-                    <span>Yapay Zeka Koçu</span>
-                </div>
-                
-                {!advice && !loadingAdvice && (
-                    <div className="text-center">
-                        <p className="text-xs text-zinc-400 mb-4 leading-relaxed">
-                            Bu hedefe 2026 yılına kadar ulaşman için Gemini AI tarafından kişiselleştirilmiş strateji ve motivasyon al.
-                        </p>
-                        <button 
-                            onClick={handleGetAdvice}
-                            className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-xl text-sm transition-all shadow-lg shadow-indigo-900/30 active:scale-95 flex items-center justify-center gap-2"
-                        >
-                            <Sparkles size={16} />
-                            Tavsiye Oluştur
-                        </button>
-                    </div>
-                )}
-
-                {loadingAdvice && (
-                    <div className="flex flex-col items-center justify-center py-6 text-zinc-400">
-                        <Loader2 size={24} className="animate-spin text-indigo-500 mb-3" />
-                        <span className="text-xs animate-pulse">Hedefin analiz ediliyor...</span>
-                    </div>
-                )}
-
-                {advice && (
-                    <div className="animate-fade-in">
-                        <div className="text-sm text-zinc-200 leading-relaxed whitespace-pre-wrap font-medium">
-                            {advice}
-                        </div>
-                        <div className="mt-4 flex justify-end">
-                            <button 
-                                onClick={handleGetAdvice}
-                                className="text-xs text-zinc-500 hover:text-white underline"
-                            >
-                                Tavsiyeyi Yenile
-                            </button>
-                        </div>
-                    </div>
-                )}
-             </div>
           </div>
 
           {/* Add Data Form */}

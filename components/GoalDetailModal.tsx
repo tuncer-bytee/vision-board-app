@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Goal } from '../types';
-import { ArrowLeft, Calendar, Plus, Trash2, TrendingUp, History, Save, AlertCircle } from 'lucide-react';
+import { ArrowLeft, Calendar, Plus, Trash2, TrendingUp, History, Save, AlertCircle, FileText, Hash } from 'lucide-react';
 
 interface GoalDetailScreenProps {
   goal: Goal;
@@ -79,47 +79,64 @@ export const GoalDetailModal: React.FC<GoalDetailScreenProps> = ({
              </p>
           </div>
 
-          {/* Add Data Form */}
+          {/* Add Data Form (Redesigned for Mobile) */}
           <div className="mb-8">
             <h3 className="text-xs font-bold text-zinc-500 mb-3 uppercase tracking-wider flex items-center gap-2">
-                <Plus size={14} /> Hızlı Veri Girişi
+                <Plus size={14} /> Yeni Kayıt Ekle
             </h3>
-            <div className="bg-zinc-900 p-4 rounded-2xl border border-zinc-800">
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
-                        <div>
-                            <label className="text-[10px] font-bold text-zinc-600 block mb-1">TARİH</label>
+            <div className="bg-zinc-900 p-5 rounded-2xl border border-zinc-800">
+                <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                    
+                    {/* Date Input */}
+                    <div className="space-y-1.5">
+                        <label className="text-[10px] font-bold text-zinc-500 block">TARİH SEÇİN</label>
+                        <div className="relative">
+                            <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 pointer-events-none" size={16} />
                             <input 
                                 type="date" 
                                 required
                                 value={newDate}
                                 onChange={(e) => setNewDate(e.target.value)}
-                                className="w-full bg-zinc-950 border border-zinc-700 rounded-xl px-3 py-3 text-sm text-white focus:border-indigo-500 outline-none"
+                                className="w-full bg-zinc-950 border border-zinc-700 rounded-xl pl-10 pr-3 py-3 text-sm text-white focus:border-indigo-500 outline-none appearance-none"
                             />
                         </div>
-                        <div>
-                            <label className="text-[10px] font-bold text-zinc-600 block mb-1">YENİ DEĞER ({goal.unit})</label>
+                    </div>
+
+                    {/* Value Input - Highlighted */}
+                    <div className="space-y-1.5">
+                        <label className="text-[10px] font-bold text-indigo-400 block uppercase">YENİ DEĞER ({goal.unit})</label>
+                        <div className="relative">
+                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-600 pointer-events-none">
+                                <Hash size={20} />
+                            </div>
                             <input 
                                 type="number" 
                                 required
                                 placeholder="0"
                                 value={newValue}
                                 onChange={(e) => setNewValue(e.target.value)}
-                                className="w-full bg-zinc-950 border border-zinc-700 rounded-xl px-3 py-3 text-sm text-white focus:border-indigo-500 outline-none font-mono"
+                                className="w-full bg-zinc-950 border-2 border-zinc-800 focus:border-indigo-500 rounded-xl pl-12 pr-4 py-4 text-2xl font-bold text-white outline-none font-mono placeholder-zinc-700 transition-colors"
                             />
                         </div>
                     </div>
-                    <div>
-                        <input 
-                            type="text" 
-                            placeholder="Kısa bir not ekle..."
-                            value={newNote}
-                            onChange={(e) => setNewNote(e.target.value)}
-                            className="w-full bg-zinc-950 border border-zinc-700 rounded-xl px-3 py-3 text-sm text-white focus:border-indigo-500 outline-none placeholder-zinc-700"
-                        />
+
+                    {/* Note Input */}
+                    <div className="space-y-1.5">
+                        <label className="text-[10px] font-bold text-zinc-500 block">NOT (OPSİYONEL)</label>
+                        <div className="relative">
+                             <FileText className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 pointer-events-none" size={16} />
+                            <input 
+                                type="text" 
+                                placeholder="Kısa bir not..."
+                                value={newNote}
+                                onChange={(e) => setNewNote(e.target.value)}
+                                className="w-full bg-zinc-950 border border-zinc-700 rounded-xl pl-10 pr-3 py-3 text-sm text-white focus:border-indigo-500 outline-none placeholder-zinc-700"
+                            />
+                        </div>
                     </div>
-                    <button type="submit" className="w-full bg-white text-black font-bold py-3 rounded-xl text-sm hover:bg-zinc-200 transition-colors flex items-center justify-center gap-2 active:scale-95 transform duration-100">
-                        <Save size={16} />
+
+                    <button type="submit" className="mt-2 w-full bg-white text-black font-bold py-4 rounded-xl text-sm hover:bg-zinc-200 transition-colors flex items-center justify-center gap-2 active:scale-95 transform duration-100 shadow-lg shadow-white/5">
+                        <Save size={18} />
                         KAYDET
                     </button>
                 </form>
